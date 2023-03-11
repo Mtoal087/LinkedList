@@ -80,10 +80,10 @@ bool LinkedList<T>::isEmpty() const{
 
 template <typename T>
 LLNode<T>* LinkedList<T>::getFirstPtr(){
-    if(m_head -> m_next == NULL)
+    if(m_head == NULL)
         return NULL;
     else
-        return m_head -> m_data;
+        return m_head;
 }
 
 template <typename T>
@@ -103,5 +103,48 @@ void LinkedList<T>::insert_front(const T& x){
 
 template <typename T>
 void LinkedList<T>::insert_back(const T& x){
-    
+    if(m_head -> m_next == NULL)
+        insert(x, m_head);
+    else{
+        LLNode<T>* tmp = new LLNode<T>;
+        tmp = m_head -> m_next;
+        while(tmp->m_next != NULL){
+            tmp = tmp -> m_next;
+        }
+        insert(x, tmp);
+    }
+}
+
+template <typename T>
+LLNode<T>* LinkedList<T>::getAtPtr(int i){
+    LLNode<T>* tmp = new LLNode<T>;
+    tmp = m_head;
+    for(int j = 0; j < i; j++){
+        tmp = tmp -> m_next;
+    }
+    return tmp;
+}
+
+template <typename T>
+void LinkedList<T>::remove(LLNode<T>* pos){
+    LLNode<T>* tmp = pos -> m_next;
+	*pos = *tmp;
+	delete tmp;
+	m_size--;
+}
+
+template <typename T>
+void LinkedList<T>::remove_front(){
+    remove(m_head);
+}
+
+template <typename T>
+void LinkedList<T>::remove_back(){
+    LLNode<T>* tmp = new LLNode<T>;
+    tmp = m_head -> m_next;
+    for(int i = 0; i < m_size - 1; i++){
+        tmp = tmp -> m_next;
+    }
+    remove(tmp);
+    tmp -> m_next = NULL;
 }
