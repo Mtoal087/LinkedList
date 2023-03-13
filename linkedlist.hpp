@@ -140,11 +140,38 @@ void LinkedList<T>::remove_front(){
 
 template <typename T>
 void LinkedList<T>::remove_back(){
-    LLNode<T>* tmp = new LLNode<T>;
-    tmp = m_head -> m_next;
-    for(int i = 0; i < m_size - 1; i++){
-        tmp = tmp -> m_next;
+    if(m_head -> m_next == NULL){
+        m_head = NULL;
+    } else{
+        LLNode<T>* temp = m_head;
+        while(temp -> m_next -> m_next != NULL){
+            temp = temp -> m_next;
+        }
+        LLNode<T>* lastNode = temp ->m_next;
+        temp -> m_next = NULL;
+        free(lastNode);
     }
-    remove(tmp);
-    tmp -> m_next = NULL;
+    m_size--;
+}
+
+template <typename T>
+LLNode<T>* LinkedList<T>::find(const T& x){
+    LLNode<T>* temp = m_head;
+    bool found = false;
+    while(found == false && temp -> m_next != NULL){
+        if(temp ->m_data == x)
+            return temp;
+        temp = temp ->m_next;
+    }
+    temp = NULL;
+    return temp;
+}
+
+  // Purpose: determines whether this list is identical to rhs list in
+  //      terms of data values and their order in the list
+  // Parameters: rhs is list to be compared to this list
+  // Returns: true if lists are identical; otherwise, false
+template <typename T>
+bool LinkedList<T>::operator== (const LinkedList<T>& rhs) const{
+    
 }
