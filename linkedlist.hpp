@@ -1,3 +1,8 @@
+/*
+Name:       Matt Toal
+Section:    103
+*/
+
 #include <iostream>
 using namespace std;
 
@@ -7,11 +12,11 @@ std::ostream& operator<< (std::ostream& out, const LinkedList<T>& list){
     out << "[ ";
     LLNode<T>* temp = list.m_head;
     while (temp != NULL) {
-        if(temp -> m_next == NULL)
+        if(temp->m_next == NULL)
             break;
         else{
-            out << temp -> m_data << ", ";
-            temp = temp -> m_next;
+            out << temp->m_data << ", ";
+            temp = temp->m_next;
         }
     }
     out << "]";
@@ -21,11 +26,11 @@ std::ostream& operator<< (std::ostream& out, const LinkedList<T>& list){
 template <typename T>
 LinkedList<T>::~LinkedList(){
     LLNode<T>* tmp;
-	tmp = m_head -> m_next;
+	tmp = m_head->m_next;
 	while(tmp != NULL){
 		delete m_head;
 		m_head = tmp;
-		tmp = m_head -> m_next;
+		tmp = m_head->m_next;
 	}
 	delete m_head;
 }
@@ -33,23 +38,39 @@ LinkedList<T>::~LinkedList(){
 template <typename T>
 const LinkedList<T>& LinkedList<T>::operator=(const LinkedList<T>& rhs){
     clear();
-	LLNode<T>* p = m_head;
-	LLNode<T>* q = rhs.m_head;
-	while(q -> m_next != NULL){
-		insert(p, q -> m_data);
-		p = p -> m_next;
-		q = q -> m_next;
-	}
+    if (rhs.m_head == NULL)
+        m_head = NULL;
+    else{
+        LLNode<T>* rhs_temp = rhs.m_head;
+        for(int i = 0; i < rhs.m_size; i++){
+            insert_back(rhs_temp->m_data);
+            rhs_temp = rhs_temp->m_next;
+        }
+    }
+    return *this;
 }
 
 template <typename T>
 LinkedList<T>::LinkedList(const LinkedList<T>& rhs){
-    LLNode<T>* temp = new LLNode<T>;
-    m_size = rhs.m_size;
-    while(rhs.m_head -> m_next != NULL){
-        m_head -> m_data = rhs.m_head -> m_data;
-        m_head -> m_next;
+    if(rhs.m_head == NULL){
+        m_head = NULL;
+    } else {
+        LLNode<T>* temp = new LLNode<T>;
+        temp->m_data = rhs.m_head->m_data;
+        temp->m_next = NULL;
+        m_head = temp;
+
+        LLNode<T>* temp0 = rhs.m_head->m_next;
+        LLNode<T>* temp1 = m_head;
+        while(temp0 != NULL){
+            temp1->m_next = new LLNode<T>;
+            temp1->m_next->m_data = temp0->m_data;
+            temp1->m_next->m_next = NULL;
+            temp1 = temp1->m_next;
+            temp0 = temp0->m_next;
+        }
     }
+    m_size = rhs.m_size;
 }
 
 template <typename T>
@@ -140,18 +161,18 @@ void LinkedList<T>::remove_front(){
 
 template <typename T>
 void LinkedList<T>::remove_back(){
-    if(m_head -> m_next == NULL){
+    if(m_head->m_next == NULL){
         m_head = NULL;
     } else{
         LLNode<T>* temp = m_head;
-        while(temp -> m_next -> m_next != NULL){
-            temp = temp -> m_next;
+        while(temp->m_next->m_next != NULL){
+            temp = temp->m_next;
         }
-        LLNode<T>* lastNode = temp ->m_next;
-        temp -> m_next = NULL;
+        LLNode<T>* lastNode = temp->m_next;
+        temp->m_next = NULL;
         free(lastNode);
+        m_size--;
     }
-    m_size--;
 }
 
 template <typename T>
@@ -173,5 +194,32 @@ LLNode<T>* LinkedList<T>::find(const T& x){
   // Returns: true if lists are identical; otherwise, false
 template <typename T>
 bool LinkedList<T>::operator== (const LinkedList<T>& rhs) const{
+    if(m_size != rhs.m_size)
+        return false;
+    LLNode<T>* temp = m_head;
+    LLNode<T>* rhs_temp = rhs.m_head;
+    for(int i = 0; i < m_size; i++){
+        if(temp->m_data != rhs_temp->m_data)
+            return false;
+        
+        temp = temp -> m_next;
+        rhs_temp = rhs_temp -> m_next;
+    }
+    return true;
+}
+
+template <typename T>
+void LinkedList<T>::append(const LinkedList<T>& l2){
+    LLNode<T>* temp = l2.m_head;
+    for(int i = 0; i < l2.m_size; i++){
+        insert_back(temp->m_data);
+        temp = temp->m_next;
+    }
+}
+
+  // Purpose: reverses the elements from the list
+  // Postconditions: the list is now in reverse order
+template <typename T>
+void LinkedList<T>::reverse(){
     
 }
