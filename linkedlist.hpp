@@ -217,9 +217,24 @@ void LinkedList<T>::append(const LinkedList<T>& l2){
     }
 }
 
-  // Purpose: reverses the elements from the list
-  // Postconditions: the list is now in reverse order
 template <typename T>
 void LinkedList<T>::reverse(){
-    
+    if(m_head != NULL){
+        LLNode<T>* next;
+        LLNode<T>*current;
+        LLNode<T>* previous;
+        next = m_head->m_next;
+        current = m_head;
+        previous = NULL;
+        while(next != NULL){
+            current->m_next = previous;
+            previous = current;
+            current = next;
+            next = next->m_next;
+        }
+        current->m_next = previous;
+        previous = current;
+        current = next;
+        m_head = previous;
+    }
 }

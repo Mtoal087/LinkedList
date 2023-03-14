@@ -12,6 +12,14 @@ int main(){
   cout << " *  TEST SET #5  * " << endl;
   cout << " ***************** " << endl;
 
+  LinkedList<int> List;
+  for(int i = 1; i < 5; i++){
+    List.insert_back(i);
+  }
+  cout << List << " Before Reverse()" << endl;
+  List.reverse();
+  cout << List << " After Reverse()" << endl;
+/*
   //TEST : Inserting 10 elements to a
   cout << endl << "TEST : Inserting 7 elements into A and B" << endl;
   for (int k=0; k<7; k++){
@@ -27,13 +35,13 @@ int main(){
   cout << "Making sure it is a deep copy.." << endl;
   B.insert_back(77);
   cout << B << " " << B.size() << endl;
-  cout << A << " " << A.size() << endl;  
+  cout << A << " " << A.size() << ", this is A" << endl;  
     
   // TEST : Reverse;
   cout << endl << "TEST : Reversing A" << endl;
   A.reverse();
   cout << A << " " << A.size() << endl;
-/*
+
   // TEST : Purge;
   cout << endl << "TEST : Purging A" << endl;
   A.purge();
