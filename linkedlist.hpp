@@ -1,7 +1,9 @@
-/*
-Name:       Matt Toal
-Section:    103
-*/
+////////////////////////////////
+//                            //
+//         Matt Toal          //
+//       Section: 103         //
+//                            //
+////////////////////////////////
 
 #include <iostream>
 using namespace std;
@@ -101,7 +103,7 @@ bool LinkedList<T>::isEmpty() const{
 
 template <typename T>
 LLNode<T>* LinkedList<T>::getFirstPtr(){
-    if(m_head == NULL)
+    if (m_size == 0)
         return NULL;
     else
         return m_head;
@@ -138,12 +140,14 @@ void LinkedList<T>::insert_back(const T& x){
 
 template <typename T>
 LLNode<T>* LinkedList<T>::getAtPtr(int i){
-    LLNode<T>* tmp = new LLNode<T>;
-    tmp = m_head;
-    for(int j = 0; j < i; j++){
-        tmp = tmp -> m_next;
+    if(i >= 0 && i <= m_size){
+        LLNode<T>* tmp = m_head;
+        for (int j = 0; j < i; j++)
+            tmp = tmp -> m_next;
+        return tmp;
     }
-    return tmp;
+    else
+        return NULL;
 }
 
 template <typename T>
@@ -220,21 +224,44 @@ void LinkedList<T>::append(const LinkedList<T>& l2){
 template <typename T>
 void LinkedList<T>::reverse(){
     if(m_head != NULL){
-        LLNode<T>* next;
-        LLNode<T>*current;
-        LLNode<T>* previous;
-        next = m_head->m_next;
-        current = m_head;
-        previous = NULL;
-        while(next != NULL){
-            current->m_next = previous;
-            previous = current;
-            current = next;
-            next = next->m_next;
+        LinkedList<T> tmplist;
+        LLNode<T>* tmp = m_head;
+        while (tmp -> m_next != NULL)
+        {
+            tmplist.insert_front(tmp->m_data);
+            tmp = tmp -> m_next;
         }
-        current->m_next = previous;
-        previous = current;
-        current = next;
-        m_head = previous;
+        clear();
+        *this = tmplist;
+    }
+}
+
+  // Purpose: Removes duplicates from a Linked List.
+  // Postconditions: all duplicate elements are removed from the list.
+  //    the first occurance of an element is kept.
+template <typename T>
+void LinkedList<T>::purge(){
+    LLNode<T>* tmp = m_head;
+    while(tmp != NULL){
+        LLNode<T>* compare = tmp->m_next;
+        while(compare != NULL){
+            if(tmp->m_data == compare->m_data){
+                remove(compare);
+            }
+            compare = compare->m_next;
+        }
+        tmp = tmp->m_next;
+    }
+}
+
+template <typename T>
+void LinkedList<T>::slice(const LinkedList<T>& l2, LLNode<T>* start, LLNode<T>* stop){
+    if(!l2.isEmpty()){
+        clear();
+        LLNode<T>* tmp = start;
+        while (tmp -> m_next != stop -> m_next){
+            insert_back(tmp -> m_data);
+            tmp = tmp -> m_next;
+        }
     }
 }
